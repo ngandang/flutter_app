@@ -37,7 +37,7 @@ class _ProductViewState extends State<ProductView> {
       children: [
         Container(
           height: 60,
-          margin: EdgeInsets.only(left: 50, right: 50),
+          margin: EdgeInsets.only(left: 30),
           child: Row(
             children: [
               FlatButton(
