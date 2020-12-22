@@ -77,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: buidBody(),
 
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: pageIndex, // this will be set when a new tab is tapped
         items: [
           BottomNavigationBarItem(
@@ -86,6 +87,10 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(
             icon: new Icon(Icons.card_travel),
             label: 'Product',
+          ),
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.mail),
+            label: 'Info',
           ),
           BottomNavigationBarItem(
             icon: new Icon(Icons.mail),
@@ -116,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 1:
         return ProductView();
       case 2:
-        return ProfileForm();
+        return createProfileView();
     }
 
   }
