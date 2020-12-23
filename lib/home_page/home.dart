@@ -93,8 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Info',
           ),
           BottomNavigationBarItem(
-            icon: new Icon(Icons.mail),
-            label: 'Info',
+            icon: new Icon(Icons.table_view),
+            label: 'Table',
           ),
 
         ],
@@ -122,6 +122,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return ProductView();
       case 2:
         return createProfileView();
+      case 3:
+        return TableView();
     }
 
   }

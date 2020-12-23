@@ -1,4 +1,5 @@
 
+import 'package:checkbox_formfield/checkbox_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/module.dart';
@@ -19,7 +20,6 @@ class ProfileForm extends StatefulWidget {
 class _ProfileFormState extends State<ProfileForm> {
 
   final _formKey = GlobalKey<FormState>();
-  final _childFormKey = GlobalKey<FormState>();
 
   TextEditingController name = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
@@ -241,7 +241,7 @@ class _ProfileFormState extends State<ProfileForm> {
                                       return 'This field is required';
                                     }
                                     if (value != info.password) {
-                                      return 'Password not match';
+                                      return 'Password mismatch';
                                     }
                                     return null;
                                   },
@@ -303,23 +303,37 @@ class _ProfileFormState extends State<ProfileForm> {
                                 color: Colors.red
                             ),
                           ) : SizedBox(),
-                          CheckboxListTile(
-                            value: info.isAccept,
+                          CheckboxListTileFormField(
                             controlAffinity: ListTileControlAffinity.leading,
                             title: Text('Terms and Conditions'),
-                            onChanged: (value) {
-                              setState(() {
-                                info.isAccept = value;
-                                showTermError = !value;
-                              });
+                            onSaved: (value) {
+                              info.isAccept = value;
+                            },
+                            validator: (value) {
+                              if(!value) {
+                                return ' This field is required';
+                              }
+                              return null;
                             },
                           ),
-                          showTermError ? Text(
-                            'Please accept term and conditions',
-                            style: TextStyle(
-                                color: Colors.red
-                            ),
-                          ) : SizedBox(),
+                          SizedBox(height: 10),
+                          // CheckboxListTile(
+                          //   value: info.isAccept,
+                          //   controlAffinity: ListTileControlAffinity.leading,
+                          //   title: Text('Terms and Conditions'),
+                          //   onChanged: (value) {
+                          //     setState(() {
+                          //       info.isAccept = value;
+                          //       showTermError = !value;
+                          //     });
+                          //   },
+                          // ),
+                          // showTermError ? Text(
+                          //   'Please accept term and conditions',
+                          //   style: TextStyle(
+                          //       color: Colors.red
+                          //   ),
+                          // ) : SizedBox(),
                           SizedBox(height: 10),
                           SizedBox(height: 40),
                           Row(
@@ -330,7 +344,7 @@ class _ProfileFormState extends State<ProfileForm> {
                                 minWidth: 100,
                                 height: 50,
                                 onPressed: () {
-                                  validateForm(context);
+                                  validateForm(context, info);
                                 },
                                 child: Text('Submit'),
                               ),
@@ -353,24 +367,6 @@ class _ProfileFormState extends State<ProfileForm> {
                               )
                             ],
                           ),
-                          // Form(
-                          //   key: _childFormKey,
-                          //   child: TextFormField(
-                          //     controller: address,
-                          //     autovalidateMode: AutovalidateMode.onUserInteraction,
-                          //     decoration: InputDecoration(
-                          //         labelText: 'Child field'
-                          //     ),
-                          //     validator: (value) {
-                          //       if (value.isEmpty) {
-                          //         return 'This field is required';
-                          //       }
-                          //       return null;
-                          //     },
-                          //
-                          //
-                          //   ),
-                          // ),
                         ],
                       ),
 
@@ -390,23 +386,23 @@ class _ProfileFormState extends State<ProfileForm> {
 
   }
 
-  void validateForm(context) {
+  void validateForm(context, model) {
     // FormState form = Form.of(context);
     // form.save();
 
-    final model = Provider.of<CustomerInfo>(context, listen: false);
+    // final model = Provider.of<CustomerInfo>(context, listen: false);
 
     if (model.gender.isEmpty ) {
       setState(() {
         showRadioError = true;
       });
     }
-    if (!model.isAccept) {
-      setState(() {
-        showTermError = true;
-      });
-    }
-    if (_formKey.currentState.validate() && !showTermError && !showRadioError)
+    // if (!model.isAccept) {
+    //   setState(() {
+    //     showTermError = true;
+    //   });
+    // }
+    if (_formKey.currentState.validate() && !showTermError)
     {
       openDialog(
         context: context,
