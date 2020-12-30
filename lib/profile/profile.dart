@@ -40,7 +40,7 @@ class _ProfileFormState extends State<ProfileForm> {
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
 
-  var customerInfo = CustomerInfo();
+  var customerInfo = CustomerInfo(id: '123', name: 'ngan', email: 'ngan@gm.com');
 
   
 
@@ -122,6 +122,7 @@ class _ProfileFormState extends State<ProfileForm> {
                                   decoration: InputDecoration(
                                       labelText: 'Name'
                                   ),
+                                  initialValue: info.name,
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       return 'This field is required';

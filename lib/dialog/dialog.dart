@@ -4,7 +4,8 @@ openDialog({
   BuildContext context,
   content,
   title = 'Alert',
-  isCancel = false
+  isCancel = false,
+  Function onOk,
 }) {
   return showDialog(
     context: context,
@@ -21,12 +22,14 @@ openDialog({
           isCancel ? TextButton(
             child: Text('Cancel'),
             onPressed: () {
+
               Navigator.of(context).pop();
             },
           ) : SizedBox(),
           TextButton(
             child: Text('OK'),
             onPressed: () {
+              onOk?.call();
               Navigator.of(context).pop();
             },
           )

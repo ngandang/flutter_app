@@ -123,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 2:
         return createProfileView();
       case 3:
-        return TableView();
+        return createTableView();
     }
 
   }

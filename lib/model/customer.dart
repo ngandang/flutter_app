@@ -10,5 +10,8 @@ class CustomerInfo extends ChangeNotifier {
   String password = '';
   String gender = '';
   bool isAccept = false;
+  CustomerInfo({
+    this.id ='', this.name, this.phoneNumber, this.salutation, this.email, this.password, this.gender, this.isAccept
+  });
 
 }

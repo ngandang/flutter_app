@@ -6,3 +6,4 @@ export './model/customer.dart';
 export './model/album.dart';
 export './services/service.dart';
 export './table/table.dart';
+export './model/order.dart';

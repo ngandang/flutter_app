@@ -2,87 +2,198 @@ export 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app/model/order_model.dart';
 import 'package:flutter_app/module.dart';
+import 'package:flutter_app/table/table_data_source.dart';
+import 'package:provider/provider.dart';
 
-class TableView extends StatelessWidget{
+ChangeNotifierProvider<OrderModel> createTableView() {
+  return ChangeNotifierProvider(
+    create: (_) => OrderModel(),
+    child: TableView(),
+  );
+}
+
+class TableView extends StatefulWidget {
+
+  @override
+  _TableState createState() => _TableState();
+}
+class _TableState extends State<TableView> {
+  bool isSortAscending = false;
+  int rowsPerPage = 5;
+  int sortColumnIndex = 0;
+  
+  final List<Order> orders = [
+    Order(orderDate: '11/1/2011', orderId: 4, orderBy: 'ngan dang', message: 'message', status: 'Request', selected: false),
+    Order(orderDate: '12/6/2012', orderId: 2, orderBy: 'test', message: 'test message', status: 'Request', selected: false),
+    Order(orderDate: '6/4/2019', orderId: 5, orderBy: 'lala', message: 'test test message', status: 'Request', selected: false),
+    Order(orderDate: '12/1/2020', orderId: 4, orderBy: 'abc', message: 'message', status: 'Request', selected: false),
+    Order(orderDate: '12/1/2014', orderId: 3, orderBy: 'hehe', message: 'message', status: 'Request', selected: false),
+    Order(orderDate: '12/1/2014', orderId: 9, orderBy: 'haha', message: 'message', status: 'Request', selected: false),
+    Order(orderDate: '12/1/2015', orderId: 8, orderBy: 'alex', message: 'message', status: 'Request', selected: false),
+    Order(orderDate: '12/1/2018', orderId: 6, orderBy: 'lyly', message: 'message', status: 'Request', selected: false)
+  ];
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  onSortColumn(int columnIndex, bool ascending) {
+    sortColumnIndex = columnIndex;
+    if (columnIndex == 1){
+      if (ascending) {
+        orders.sort((a,b) => a.orderId.compareTo(b.orderId));
+      } else {
+        orders.sort((a,b) => b.orderId.compareTo(a.orderId));
+      }
+    } else {
+      if (columnIndex == 2){
+        if (ascending) {
+          orders.sort((a,b) => a.orderBy.compareTo(b.orderBy));
+        } else {
+          orders.sort((a,b) => b.orderBy.compareTo(a.orderBy));
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 60,
-          child: Center(
-            child: Text('Table',
-            style: TextStyle(
-              fontSize: 20,
-            ),),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            padding: EdgeInsets.all(40),
-            child: Table(
-              border: TableBorder(
-                horizontalInside: BorderSide(color: Colors.grey),
-                top: BorderSide(color: Colors.grey),
-                bottom: BorderSide(color: Colors.grey),
-
-              ),
-
-              children: [
-                TableRow(children: [
-                  buildHeader('Date'),
-                  buildHeader('Id'),
-                  buildHeader('Name'),
-                  buildHeader('Message'),
-                  buildHeader('Status')
-                ],
+    return Consumer<OrderModel>(
+        builder: (context, orderModel, child)
+        {
+          return Column(
+            children: [
+              Container(
+                height: 60,
+                child: Center(
+                  child: Text('Table',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),),
                 ),
-                TableRow(children: [
-                  buildContent('11/11/2011'),
-                  buildContent('012'),
-                  buildContent('Ngan'),
-                  buildContent('This is aMessage'),
-                  buildContent('Approve'),
-                ]),
-                TableRow(children: [
-                  buildContent('11/11/2011'),
-                  buildContent('012'),
-                  buildContent('Ngan'),
-                  buildContent('This is a Message'),
-                  buildContent('Approve'),
-                ])
-              ],
-            ),
-          ),
-        )
-      ],
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(40),
+                  child: PaginatedDataTable(
+                    sortAscending: isSortAscending,
+                    sortColumnIndex: sortColumnIndex,
+                    header: Text('Header'),
+                    // onSelectAll: (value) {
+                    //   setState(() {
+                    //     for(int i=0; i< orders.length; i++) {
+                    //       orders[i].selected = value;
+                    //     }
+                    //   });
+                    // },
+                    actions: [
+                      IconButton(
+                        icon: Icon(Icons.refresh),
+                        onPressed: () {
+                          setState(() {
+                            for(int i=0; i< orders.length; i++) {
+                              orders[i].selected = false;
+                            }
+                          });
+                        },
+                      ),
+
+                    ],
+                    rowsPerPage: rowsPerPage <= orders.length ? rowsPerPage : orders
+                        .length,
+                    onPageChanged: (value) {
+                      if (value + rowsPerPage > orders.length) {
+                        setState(() {
+                          rowsPerPage = orders.length % 5;
+                        });
+                      } else {
+                        setState(() {
+                          rowsPerPage = 5;
+                        });
+                      }
+                    },
+
+                    columns: [
+                      DataColumn(
+                        label: Text(
+                          'Order Date',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                          label: Text(
+                            'Order ID',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700
+                            ),
+                          ),
+                          onSort: (columnIndex, sortAscending) {
+                            setState(() {
+                              isSortAscending = !isSortAscending;
+                            });
+                            onSortColumn(columnIndex, sortAscending);
+                          }
+                      ),
+                      DataColumn(
+                          label: Text(
+                            'Order By',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700
+                            ),
+                          ),
+                          onSort: (columnIndex, sortAscending) {
+                            setState(() {
+                              isSortAscending = !isSortAscending;
+                            });
+                            onSortColumn(columnIndex, sortAscending);
+                          }
+                      ),
+                      DataColumn(
+                          label: Text(
+                            'Order Message',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700
+                            ),
+                          )
+                      ),
+                      DataColumn(
+                          label: Text(
+                            'Status',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700
+                            ),
+                          )
+                      ),
+                      DataColumn(
+                          label: Text(
+                            '',
+                          )
+                      )
+                    ],
+                    source: TableDataSource(
+                        context: context,
+                        orders: orders,
+                        changeStatus: (index, status) {
+                          setState(() {
+                            orders[index].status = status;
+                          });
+                        }
+                    ),
+                  ),
+                ),
+              )
+            ],
+          );
+        }
     );
   }
 
-  Widget buildHeader(String text) {
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-        color: Colors.grey
-      ),
-      child: Align(
-        alignment: Alignment.center,
-        child: Text(text,
-        style: TextStyle(
-          fontWeight: FontWeight.w600
-        ),),
-      )
-    );
-  }
-
-  Widget buildContent(String text) {
-    return Container(
-      height: 60,
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(text),
-      ),
-    );
-  }
 }
+
