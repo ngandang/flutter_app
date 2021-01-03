@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_app/module.dart';
+import 'package:flutter_app/src/module.dart';
 
 class ApiService extends ChangeNotifier{
   static ApiService _sInstance;

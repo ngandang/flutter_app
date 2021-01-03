@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/module.dart';
+import 'package:flutter_app/src/list_view/list_view.dart';
+import 'package:flutter_app/src/module.dart';
+import 'package:flutter_app/src/table/table.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -96,6 +98,10 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: new Icon(Icons.table_view),
             label: 'Table',
           ),
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.list),
+            label: 'List View',
+          ),
 
         ],
         onTap: (index) {
@@ -124,6 +130,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return createProfileView();
       case 3:
         return createTableView();
+      case 4:
+        return ListItemView();
     }
 
   }

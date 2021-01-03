@@ -85,27 +85,6 @@ class _ProductViewState extends State<ProductView> {
                 ),
 
               ),
-              FlatButton(
-                color: Colors.blue,
-                minWidth: 100,
-                height: 50,
-                onPressed: () {
-                  openDialog(
-                    context: context,
-                    title: 'Get Data',
-                    isCancel: true,
-                    content: Text('This is confirm popup'),
-                  );
-                },
-                child: Text(
-                  'get data',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16
-                  ),
-                ),
-
-              )
             ],
           ),
         ),

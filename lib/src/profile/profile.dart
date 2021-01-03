@@ -2,7 +2,7 @@
 import 'package:checkbox_formfield/checkbox_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/module.dart';
+import 'package:flutter_app/src/module.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:provider/provider.dart';
 

@@ -3,8 +3,8 @@ export 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/model/order_model.dart';
-import 'package:flutter_app/module.dart';
-import 'package:flutter_app/table/table_data_source.dart';
+import 'package:flutter_app/src/module.dart';
+import 'package:flutter_app/src/table/table_data_source.dart';
 import 'package:provider/provider.dart';
 
 ChangeNotifierProvider<OrderModel> createTableView() {

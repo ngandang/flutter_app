@@ -2,7 +2,7 @@ export 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app/module.dart';
+import 'package:flutter_app/src/module.dart';
 
 class TableDataSource extends DataTableSource {
 
