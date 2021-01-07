@@ -1,9 +1,12 @@
 
 import 'package:checkbox_formfield/checkbox_formfield.dart';
+import 'package:date_time_picker/date_time_picker.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/src/module.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 ChangeNotifierProvider<CustomerInfo> createProfileView() {
@@ -21,11 +24,16 @@ class _ProfileFormState extends State<ProfileForm> {
 
   final _formKey = GlobalKey<FormState>();
 
+  final _dateTimeKey = GlobalKey<FormFieldState>();
+
+  final _format = DateFormat('dd/MM/yyyy, HH:mm:ss');
+
   TextEditingController name = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
+  TextEditingController datetime = TextEditingController();
 
   String salutation = '';
 
@@ -40,9 +48,11 @@ class _ProfileFormState extends State<ProfileForm> {
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
 
+  bool isChanged = false;
+
   var customerInfo = CustomerInfo(id: '123', name: 'ngan', email: 'ngan@gm.com');
 
-  
+
 
   @override
   Widget build(BuildContext context) {
@@ -139,6 +149,52 @@ class _ProfileFormState extends State<ProfileForm> {
                           ),
                           SizedBox(height: 10),
 
+                          DateTimeField(
+                            format: _format,
+                            key: _dateTimeKey,
+                            decoration: InputDecoration(
+                              labelText: 'Date time',
+
+                            ),
+                            initialValue: DateTime.now(),
+                            onShowPicker: (context, currentValue) async {
+                              final date = await showDatePicker(
+                                  context: context,
+                                  // firstDate: DateTime(1900),
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime(2100),
+                                  initialEntryMode: DatePickerEntryMode.calendar,
+                                  selectableDayPredicate:
+                                      (value) =>
+                                      value.isBefore(DateTime.now().subtract(Duration(days: 1))) ? false : true,
+                                    // value.weekday == 5 || value.weekday == 6 ? false : true,
+                                  );
+                              if (date != null) {
+                                final time = await showTimePicker(
+                                  context: context,
+                                  initialTime:
+                                  TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                                  initialEntryMode: TimePickerEntryMode.input
+                                );
+                                return DateTimeField.combine(date, time);
+                              } else {
+                                return currentValue;
+                              }
+                            },
+                            autovalidate: isChanged,
+                            onChanged: (value) {
+                              _dateTimeKey.currentState.validate();
+                            },
+                            validator: (value) {
+                              if (value == null) {
+                                return 'This field is required';
+                              }
+                              return null;
+                            },
+
+                          ),
+                          SizedBox(height: 10),
                           TextFormField(
                             autovalidateMode: AutovalidateMode
                                 .onUserInteraction,
@@ -345,7 +401,7 @@ class _ProfileFormState extends State<ProfileForm> {
                                 minWidth: 100,
                                 height: 50,
                                 onPressed: () {
-                                  validateForm(context, info);
+                                  validateForm(context);
                                 },
                                 child: Text('Submit'),
                               ),
@@ -382,28 +438,35 @@ class _ProfileFormState extends State<ProfileForm> {
     );
   }
 
+  bool _decideWhichDayToEnable(DateTime day) {
+    if ((day.isAfter(DateTime.now().subtract(Duration(days: 1))))) {
+      return true;
+    }
+    return false;
+  }
+
   void resetForm() {
     _formKey.currentState.reset();
 
   }
 
-  void validateForm(context, model) {
+  void validateForm(context) {
     // FormState form = Form.of(context);
     // form.save();
 
-    // final model = Provider.of<CustomerInfo>(context, listen: false);
+    final model = Provider.of<CustomerInfo>(context, listen: false);
 
-    if (model.gender.isEmpty ) {
-      setState(() {
-        showRadioError = true;
-      });
-    }
+    // if (model.gender.isEmpty ) {
+    //   setState(() {
+    //     showRadioError = true;
+    //   });
+    // }
     // if (!model.isAccept) {
     //   setState(() {
     //     showTermError = true;
     //   });
     // }
-    if (_formKey.currentState.validate() && !showTermError)
+    if (_formKey.currentState.validate() )
     {
       openDialog(
         context: context,

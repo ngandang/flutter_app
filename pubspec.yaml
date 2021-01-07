@@ -25,6 +25,11 @@ dependencies:
     sdk: flutter
 
   email_validator: '^1.0.5'
+#  intl: ^0.16.1
+
+  datetime_picker_formfield: '^1.0.0'
+
+  date_time_picker: "^1.1.1"
 
 
   # The following adds the Cupertino Icons font to your application.

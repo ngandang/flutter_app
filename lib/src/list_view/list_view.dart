@@ -15,6 +15,10 @@ class _ListViewState extends State<ListItemView> {
   Album album;
 
   List<Album> _album = List<Album>();
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Future<List<Album>> fetchNote() async {
     var url = 'https://jsonplaceholder.typicode.com/albums';
@@ -31,11 +35,20 @@ class _ListViewState extends State<ListItemView> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _album = [];
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     fetchNote().then((value) {
-      setState(() {
-        _album.addAll(value);
-      });
+      if(value != null) {
+        setState(() {
+          _album.addAll(value);
+        });
+      }
     });
 
     return Scaffold(

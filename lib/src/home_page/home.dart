@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/quick_menu/quick_menu.dart';
 import 'package:flutter_app/src/list_view/list_view.dart';
 import 'package:flutter_app/src/module.dart';
 import 'package:flutter_app/src/table/table.dart';
+import 'package:flutter_app/welcome/welcome.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -77,6 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: buidBody(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: QuickMenu(),
 
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -117,13 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget buidBody() {
     switch (pageIndex) {
       case 0:
-        return Center(child: Text(
-            'Welcome to my app',
-          style: TextStyle(
-            color: Colors.red,
-            fontSize: 40
-          ),
-        ));
+        return Welcome();
       case 1:
         return ProductView();
       case 2:

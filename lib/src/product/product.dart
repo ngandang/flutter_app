@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/quick_menu/quick_menu.dart';
 
 import '../module.dart';
 
@@ -12,9 +13,9 @@ class ProductView extends StatefulWidget {
 class _ProductViewState extends State<ProductView> {
   int selectedModel = 0;
 
-  Album album;
 
   final List<String> models = ['Kona', 'Paradise', 'IONIQ'];
+  bool showMenu = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,7 @@ class _ProductViewState extends State<ProductView> {
           ),
         ) ,
       body: buildBody(),
+      // floatingActionButton: QuickMenu()
     );
   }
   buildBody() {
@@ -141,23 +143,28 @@ class _ProductViewState extends State<ProductView> {
                       )
                   ),
                   padding: EdgeInsets.all(30),
-                  child: Column(
-                    children: [
-                      Image.asset('assets/kona.png'),
-                      Center(child: Text(
-                        'Kona',
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.indigo
-                        ),
-                      )),
-                      Text(
-                        'Price : 2000',
-                        style: TextStyle(
-                            fontSize: 14
-                        ),
-                      )
-                    ],
+                  child: FlatButton(
+                    onPressed: (){
+                      print('selected');
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset('assets/kona.png'),
+                        Center(child: Text(
+                          'Kona',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.indigo
+                          ),
+                        )),
+                        Text(
+                          'Price : 2000',
+                          style: TextStyle(
+                              fontSize: 14
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 )
             ]
